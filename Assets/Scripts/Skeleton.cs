@@ -5,10 +5,15 @@ using UnityEngine;
 
 public class Skeleton : MonoBehaviour
 {
-    //Set the speed the Enemy Skeleton walks at
+    //Set the speed the Game Object moves at.
     public float walkSpeed = 5f;
+    
+    //Set the detection distance of wall colliders to stop at.
     public float walkStopRate = 0.06f;
+
+    //Designate attack detection zone
     public DetectionZone attackZone;
+    public DetectionZone cliffDetectionZone;
     
 
     Rigidbody2D rb;
@@ -16,12 +21,17 @@ public class Skeleton : MonoBehaviour
     Animator animator;
     Damageable damageable;
 
-    //Check the direction the skeleton is facing
+    //Check the direction the Game Object is facing.
     public enum FacingDirection {Right, Left}
+
+    //Set the inital walking direction to the right.
     public Vector2 WalkDirectionVector = Vector2.right;
 
+   
     private FacingDirection _walkDirection;
 
+     //Check the current facing direction and move the Game Object. 
+    //If the Game Object collides with walls (other colliders), turn in the other direction and continue walking
     public FacingDirection WalkDirection
     {
         get { return _walkDirection;}
@@ -46,7 +56,7 @@ public class Skeleton : MonoBehaviour
 
     public bool _hasTarget = false;
    
-
+    //Get the animation parameters if the game object has another specified Game Object within the detection zone and set appropriate value.
     public bool HasTarget
     {
         get
@@ -60,11 +70,28 @@ public class Skeleton : MonoBehaviour
         }
     }
 
+    //Check if the game object has met the conditions to allow movement and set the appropriate value within the animation parameter.
     public bool CanMove
     {
         get
         {
             return animator.GetBool(AnimationStrings.canMove);
+        }
+    }
+
+    //Check the Attack Cooldown value in the animation parameters and set it
+    // to the appropriate value after the Game Object has used an attack.
+    public float AttackCooldown
+    {
+        get
+        {
+            return animator.GetFloat(AnimationStrings.attackCooldown);
+
+        }
+        private set
+        {
+            animator.SetFloat(AnimationStrings.attackCooldown, Mathf.Max(value, 0));
+
         }
     }
 
@@ -77,11 +104,20 @@ public class Skeleton : MonoBehaviour
     }
 
   // Update is called once per frame
+  // If the other Game Object enters the detection zone, then this Game Object sets the value to has target to true.
+  // If the Game Object has attacked another Game Object, the attack cooldown timer will decrease until zero and able to attack again.
     void Update()
     {
        HasTarget = attackZone.detectedColliders.Count > 0;
+       
+       if(AttackCooldown > 0)
+       {
+        AttackCooldown -= Time.deltaTime;
+       }
+       
     }
-
+     //When this Game Object is on the ground and touching a wall, it will turn the opposite direction by calling the function.
+     //If the Game Object is not damaged and can move, it will move in the facing direction at the set walk speed.
     void FixedUpdate()
     {
         if(touchingDirections.IsGrounded && touchingDirections.IsOnWall)
@@ -98,6 +134,8 @@ public class Skeleton : MonoBehaviour
        
     }
 
+    // The Game Object will walk in the direction its facing, and set a new facing direction if colliding with another object/collider.
+    // If the Game Object does not have an inital direction an error message will be printed to the console.
     private void FlipDirection()
     {
         if(WalkDirection == FacingDirection.Right)
@@ -112,10 +150,18 @@ public class Skeleton : MonoBehaviour
         }
     }
 
-//Applies damage and knockback when Game Object is hit.
+//Applies damage and knockback to the Game Obeject when detecting a hit.
     public void OnHit(int damage, Vector2 knockback)
     {
         rb.velocity = new Vector2(knockback.x, rb.velocity.y + knockback.y);
+    }
+
+    public void OnCliffDetection()
+    {
+        if(touchingDirections.IsGrounded)
+        {
+            FlipDirection();
+        }
     }
   
 }
