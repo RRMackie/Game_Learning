@@ -16,6 +16,7 @@ public class Attack : MonoBehaviour
         if(damageable != null)
         {
             Vector2 knockbackDirection = transform.parent.localScale.x > 0 ? knockback : new Vector2(-knockback.x, knockback.y);
+           
             //Hit the target Game Object
             bool gotHit = damageable.Hit(attackDamage, knockbackDirection);
             

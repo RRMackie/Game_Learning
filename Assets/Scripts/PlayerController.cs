@@ -230,6 +230,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+      public void OnRangedAttack(InputAction.CallbackContext context)
+    {
+        if(context.started)
+        {
+            animator.SetTrigger(AnimationStrings.rangedAttackTrigger);
+        }
+    }
+
     //Apply the damage and knockback to player when hit
     public void OnHit(int damage, Vector2 knockback)
     {

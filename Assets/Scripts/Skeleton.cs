@@ -6,8 +6,11 @@ using UnityEngine;
 public class Skeleton : MonoBehaviour
 {
     //Set the speed the Game Object moves at.
-    public float walkSpeed = 5f;
+    public float accelerationSpeed = 30f;
     
+    //Set the max speed of the Game Object.
+    public float maxSpeed = 3f;
+
     //Set the detection distance of wall colliders to stop at.
     public float walkStopRate = 0.06f;
 
@@ -95,6 +98,11 @@ public class Skeleton : MonoBehaviour
         }
     }
 
+    // Called when component exists in scene
+    // Rigidbody for physics values.
+    // Animator for values tied to animatons.
+    // Touching Directions for movement and direction orientation.
+    // Damageable for health and hit values.
     private void Awake()
     {
         rb = GetComponent <Rigidbody2D>();
@@ -126,8 +134,11 @@ public class Skeleton : MonoBehaviour
         }
         if(!damageable.LockVelocity)
         {
-             if(CanMove)
-            rb.velocity = new Vector2(walkSpeed * WalkDirectionVector.x, rb.velocity.y);
+             if(CanMove && touchingDirections.IsGrounded)
+             //Character will start to accellerate towards max Speed
+             // The clamp value limits the speed depending on facing direction
+            rb.velocity = new Vector2(
+                 Mathf.Clamp(rb.velocity.x + (accelerationSpeed *WalkDirectionVector.x * Time.fixedDeltaTime), -maxSpeed, maxSpeed), rb.velocity.y);
         else
            rb.velocity = new Vector2(Mathf.Lerp(rb.velocity.x, 0, walkStopRate),rb.velocity.y);
         }

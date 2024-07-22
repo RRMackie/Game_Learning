@@ -11,7 +11,7 @@ public class Damageable : MonoBehaviour
     Animator animator;
 
     [SerializeField]
-    private int _maxHealth;
+    private int _maxHealth = 100;
     public int MaxHealth
     {
         get
@@ -126,5 +126,25 @@ public class Damageable : MonoBehaviour
             //Game object was unable to be hit
             return false;
         }
+    }
+
+    //Allow the character to restore health
+    public bool Heal(int healthRestore)
+    {
+        // Check if the character is alive and add the restored health to the characters total health
+        // Health restored is calculated through the characters max health value and their current health value,
+        // with the true health restored based on the difference and capped at max health.
+        if (IsAlive && Health < MaxHealth)
+        {
+            int maxHeal = Mathf.Max(MaxHealth - Health, 0);
+            int trueHeal = Mathf.Min(maxHeal, healthRestore);
+            Health += trueHeal;
+            //Trigger the event and create the heath text UI object reflecting the actual value of health restored.
+            CharacterEvents.characterHealed(gameObject, trueHeal);
+            return true;
+        }
+        
+        return false;
+
     }
 }
