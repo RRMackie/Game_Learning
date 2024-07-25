@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class UIManager : MonoBehaviour
 {
@@ -57,4 +58,26 @@ public class UIManager : MonoBehaviour
         //Cast the integer to string to show value in Health text
         tmpText.text = healthRecovered.ToString();
    }
+
+/// <Exit Game>
+/// 
+/// <Allows the user to exit the game build through pressing the escape key>
+/// <param name="context"></button press "Escape" Key>
+   public void OnExitGame(InputAction.CallbackContext context)
+   {
+    if(context.started)
+    {
+        #if (UNITY_EDITOR || DEVELOPMENT_BUILD)
+            Debug.Log(this.name + " : " + this.GetType() + " : " + System.Reflection.MethodBase.GetCurrentMethod().Name);
+           #endif
+
+           #if (UNITY_EDITOR)
+                    UnityEditor.EditorApplication.isPlaying = false; //If playing the build in the unity editor
+           #elif (UNITY_STANDALONE)
+                   Application.Quit(); //If playing in a standalone build of the software
+           #elif (UNITY_WEBGL)
+                SceneManager.LoadScene("QuitScene"); //If playing a browser based version of the software
+          #endif
+        }
+    }
 }

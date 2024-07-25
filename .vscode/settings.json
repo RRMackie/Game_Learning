@@ -56,5 +56,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Game_Learning.sln"
+    "dotnet.defaultSolution": "Game_Learning.sln",
+    "dotnet.preferCSharpExtension": true
 }
