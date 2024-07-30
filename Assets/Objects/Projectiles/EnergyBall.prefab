@@ -100,9 +100,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 890a8413e92dfb14c9adda9419edcf29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 5
+  damage: 15
   moveSpeed: {x: 20, y: 0}
   knockback: {x: 2, y: 0}
+  lifetime: 5
+  maxHits: 1
 --- !u!95 &7471376228844801356
 Animator:
   serializedVersion: 5

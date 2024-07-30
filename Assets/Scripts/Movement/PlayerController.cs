@@ -22,7 +22,6 @@ public class PlayerController : MonoBehaviour
     TouchingDirections touchingDirections;
     Damageable damageable;
 
-
     //Set the players move speed depending on current state.
     public float CurrentMoveSpeed
     {
@@ -243,4 +242,5 @@ public class PlayerController : MonoBehaviour
     {
         rb.velocity = new Vector2(knockback.x, rb.velocity.y + knockback.y);
     }
+
 }

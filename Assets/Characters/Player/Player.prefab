@@ -239,6 +239,8 @@ MonoBehaviour:
   runSpeed: 9
   airSpeed: 5
   jumpForce: 10
+  interactPressed: 0
+  submitPressed: 0
   _isMoving: 0
   _isRunning: 0
   _isFacingRight: 1
@@ -395,6 +397,22 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 59569247-a561-4676-a07d-af5b182acfeb
     m_ActionName: UI/Exit[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2651946432040544590}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: InteractButtonPressed
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: c02c5d27-c990-4854-b00b-9c3a347cba35
+    m_ActionName: Player/Interact[/Keyboard/e]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -515,6 +533,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  healthChanged:
+    m_PersistentCalls:
+      m_Calls: []
   _maxHealth: 100
   _health: 100
   _isAlive: 1
