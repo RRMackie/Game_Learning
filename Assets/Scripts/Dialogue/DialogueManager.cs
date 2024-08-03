@@ -4,10 +4,24 @@ using TMPro;
 using UnityEngine;
 using Ink.Runtime;
 using UnityEngine.EventSystems;
-using System;
 
 public class DialogueManager : MonoBehaviour
 {
+    /*
+    The Dialogue manager handles all dialogue related information on the UI.
+    Dialogue itself is created using the Ink editor and is intergated with a Unity Package 
+    between the two softwares.
+
+    The ink editor allows for writing dialogue/narrative scripts, while adding in scripted events
+    such as choices or conditions and writes it to a JSON files. The plugin keeps the integrity of this dialogue script
+    and will display the correct text in the dialogue panel.
+
+    The dialogue manager deals with choices made by players through the button addons in the Unity UI,
+    and will cycle through scripted dialogue in the JSON file.
+
+    The choice options and the dialogue cooldown time, are set in the Unity Inspector.
+
+    */
     [Header("Dialogue UI")]
     [SerializeField] private GameObject dialoguePanel;
     [SerializeField] private TextMeshProUGUI dialogueText;
@@ -16,7 +30,6 @@ public class DialogueManager : MonoBehaviour
     [Header("Choices UI")]
     [SerializeField] private GameObject[] choices;
     private TextMeshProUGUI[] choicesText;
-
 
     //Specific type tied to the INK plugin
     private Story currentStory;
@@ -32,7 +45,6 @@ public class DialogueManager : MonoBehaviour
     private int correctAnswer;
 
     private DialogueTrigger currentDialogueTrigger;
-
 
     private void Awake()
     {
@@ -119,7 +131,6 @@ public class DialogueManager : MonoBehaviour
         {
             ExitDialogueMode();
         }
-
     }
 
     private void DisplayChoices()
@@ -129,7 +140,7 @@ public class DialogueManager : MonoBehaviour
         // Debug check if number of choices exceeds the number that the UI can support
         if(currentChoices.Count > choices.Length)
         {
-            Debug.LogError("More choices were given than the UI can support. Number og choices given: " 
+            Debug.LogError("More choices were given than the UI can support. Number of choices given: " 
             + currentChoices.Count);
         }
 
@@ -146,9 +157,7 @@ public class DialogueManager : MonoBehaviour
         {
             choices[i].gameObject.SetActive(false);
         }
-
         StartCoroutine(SelectFirstChoice());
-
     }
 
     private IEnumerator SelectFirstChoice()
@@ -158,7 +167,6 @@ public class DialogueManager : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         yield return new WaitForEndOfFrame();
         EventSystem.current.SetSelectedGameObject(choices[0].gameObject);
-
     }
 
     public void MakeChoice(int choiceIndex)

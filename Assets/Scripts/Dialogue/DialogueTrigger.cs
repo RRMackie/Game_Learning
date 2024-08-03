@@ -1,13 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
 public class DialogueTrigger : MonoBehaviour
 {
+    /*
+    This class sets up game objects that use the dialogue system, creating parameters to hold specific JSON txts files,
+    before initilaing the dialogue system through the dialogue manager.
+
+    The visual cue is a small symbol that appears above the interactable NPC, notifying the player that they can interact or
+    that this game object has dialogue atttached.
+
+    The visual cue and Text can be set using the Unity Inspector allowing for specific instances of interactable NPCs
+
+    If creating a NPC with choices involved, these can also be set using the unity inspector.
+    If the NPC is tied to level progression, the correct choice can also be set in the inspector,
+    as well as the moving platform object to be activated.
+    */
+
     // Set up the game object acting as the visual cue
     [Header("Visual Cue")]
-    [SerializeField] private GameObject visualCue;
+    [SerializeField] public GameObject visualCue;
 
     // Set up the ink JSON file Text Asset to be used for the dialogue
     [Header("Ink JSON")]
@@ -19,8 +30,7 @@ public class DialogueTrigger : MonoBehaviour
     [Header("Platform Reference")]
     [SerializeField] private MovingPlatform movingPlatform;
 
-  
-    private bool playerInRange;
+    public bool playerInRange;
 
     private void Awake()
     {
@@ -28,44 +38,46 @@ public class DialogueTrigger : MonoBehaviour
         visualCue.SetActive(false);
     }
 
-    private void Update()
+    public void Update()
     {
+        //Check if the player is in range of the NPC collider and if there is not dialogue playing already
         if (playerInRange && !DialogueManager.GetInstance().dialogueIsPlaying)
         {
+            // If within range the visual cue is shown above the game object.
             visualCue.SetActive(true);
             if (Input.GetKeyDown(KeyCode.E)) // Check for key press
             {
+                //Start the dialogue manager instance using the text asset
                 DialogueManager.GetInstance().EnterDialogueMode(inkJSON, correctAnswer, this);
                 Debug.Log(inkJSON.text);
-           }
+            }
         }
         else
         {
+            // If not nearby the visual cue does not show
             visualCue.SetActive(false);
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collider)
+    public void OnTriggerEnter2D(Collider2D collider)
     {
-        if(collider.gameObject.tag == "Player")
+        if (collider.gameObject.tag == "Player")
         {
             playerInRange = true;
-
-
         }
 
     }
 
-    private void OnTriggerExit2D(Collider2D collider)
+    public void OnTriggerExit2D(Collider2D collider)
     {
-         if(collider.gameObject.tag == "Player")
+        if (collider.gameObject.tag == "Player")
         {
             playerInRange = false;
-            
         }
     }
 
-        public void ActivatePlatform()
+    // Call the Activate Platfrom method in the moving platform script
+    public void ActivatePlatform()
     {
         if (movingPlatform != null)
         {

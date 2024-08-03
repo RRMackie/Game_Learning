@@ -1,12 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.Events;
 
-
 public class Damageable : MonoBehaviour
 {
+    /*
+    The damagable script adds health values to a game object to allow them to be attacked by
+    other game objects, with a death state when health reaches 0.
+
+    If you do not want a game object to be destuctible then  do not add this as a component.
+
+    Health and Max health can be directly set for a specific game object within the Unity Inspector.
+
+    The damageable script is referenced in any combat related scripts or animations.
+    */
     public UnityEvent<int, Vector2> damageableHit;
     public UnityEvent<int, int> healthChanged;
     Animator animator;
@@ -40,7 +46,7 @@ public class Damageable : MonoBehaviour
             healthChanged?.Invoke(_health, MaxHealth);
 
             //If health drops to 0 or below the value, the character enters the death state
-            if(_health <= 0)
+            if (_health <= 0)
             {
                 IsAlive = false;
             }
@@ -51,13 +57,13 @@ public class Damageable : MonoBehaviour
     private bool _isAlive = true;
 
     [SerializeField]
-    private bool isInvincible = false;
-
+    public bool isInvincible = false;
     private float timeSinceHit = 0;
     public float invincibilityTime = 0.25f;
 
     //Set a characters alive state
-    public bool IsAlive {
+    public bool IsAlive
+    {
         get
         {
             return _isAlive;
@@ -70,8 +76,8 @@ public class Damageable : MonoBehaviour
         }
     }
 
-//Locks the players velocity constricting movement, meant to not obstruct other physics based components.
-      public bool LockVelocity
+    //Locks the players velocity constricting movement for specific states.
+    public bool LockVelocity
     {
         get
         {
@@ -84,17 +90,17 @@ public class Damageable : MonoBehaviour
     }
 
     // Called when component exists in scene
-    private void Awake()
+    public void Awake()
     {
         animator = GetComponent<Animator>();
     }
-    
+
     public void Update()
     {
         //Create a timer to remove invincibilty state after a character is hit
-        if(isInvincible)
+        if (isInvincible)
         {
-            if(timeSinceHit > invincibilityTime)
+            if (timeSinceHit > invincibilityTime)
             {
                 //Remove the invincibility frames after a charcter is hit
                 isInvincible = false;
@@ -108,7 +114,7 @@ public class Damageable : MonoBehaviour
     //Remove health when a character is hit and give them invincibility frames
     public bool Hit(int damage, Vector2 knockback)
     {
-        if(IsAlive && !isInvincible)
+        if (IsAlive && !isInvincible)
         {
             Health -= damage;
             isInvincible = true;
@@ -119,7 +125,6 @@ public class Damageable : MonoBehaviour
             LockVelocity = true;
             damageableHit?.Invoke(damage, knockback);
             CharacterEvents.characterDamaged.Invoke(gameObject, damage);
-           
 
             return true;
         }
@@ -133,6 +138,9 @@ public class Damageable : MonoBehaviour
     //Allow the character to restore health
     public bool Heal(int healthRestore)
     {
+        // Debug log
+        Debug.Log($"Heal called with: {healthRestore}");
+
         // Check if the character is alive and add the restored health to the characters total health
         // Health restored is calculated through the characters max health value and their current health value,
         // with the true health restored based on the difference and capped at max health.
@@ -142,10 +150,13 @@ public class Damageable : MonoBehaviour
             int trueHeal = Mathf.Min(maxHeal, healthRestore);
             Health += trueHeal;
             //Trigger the event and create the heath text UI object reflecting the actual value of health restored.
-            CharacterEvents.characterHealed(gameObject, trueHeal);
+            if (CharacterEvents.characterHealed != null)
+            {
+                CharacterEvents.characterHealed.Invoke(gameObject, trueHeal);
+            }
             return true;
         }
-        
+
         return false;
 
     }

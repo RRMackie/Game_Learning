@@ -1,9 +1,14 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
+    /*
+    Sets behaviour for any spawned projectiles within the game.
+    Values can be set within the Unity Inspector to allow for different projectiles.
+
+    The projectile has a set lifespan so as to avoid never being deleted if not hitting a target.
+    */
 
     //Damage the projectile will cause on hit
     public int damage = 10;
@@ -16,18 +21,21 @@ public class Projectile : MonoBehaviour
 
     // Lifetime of the projectile before it is destroyed (in seconds)
     [Header("Lifetime Settings")]
-    [SerializeField] private float lifetime = 5f;
+    [SerializeField] public float lifetime = 5f;
 
     // Number of hits before the projectile is destroyed
     [Header("Collision Settings")]
-    [SerializeField] private int maxHits = 1;
+    [SerializeField] public int maxHits = 1;
 
     Rigidbody2D rb;
     Animator animator;
-    private int hitCount = 0;
+    public int hitCount = 0;
 
-    // Called when component exists in scene
-    // Rigidbody for physics values.
+    /* 
+    Called when component exists in scene
+    Rigidbody for physics values.
+    Animator to trigger animations
+    */
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -36,13 +44,13 @@ public class Projectile : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
         rb.velocity = new Vector2(moveSpeed.x * transform.localScale.x, moveSpeed.y);
         StartCoroutine(DestroyAfterLifetime());
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    public void OnTriggerEnter2D(Collider2D collision)
     {
         Damageable damageable = collision.GetComponent<Damageable>();
 
@@ -64,9 +72,7 @@ public class Projectile : MonoBehaviour
                 {
                     Destroy(gameObject);
                 }
-
             }
-
         }
     }
 

@@ -6,18 +6,37 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    /*
+    Sets up the player movement and interaction systems by using Unity's in built input manager system.
+
+    Player direction is denoted by keyboard or gamepad input, within the manager system:
+    A - Left Movement
+    D - Right Movement
+    Space - Jump
+    Shift - Run
+    Left Mouse - Attack
+    F - Projectile
+    E - Interact
+
+    The movement speed values can be set in the unity inspector, with many of the physics
+    values handled by the RigidBody2D component. Interactions with other objects are
+    through collider components and collisions. 
+    The player character has sprite animations that are triggered through specfic parameters and conditions,
+    which play a role in game design and gameplay.
+    */
+
     //Set the Player's speed when moving.
     public float walkSpeed = 5f;
-    
+
     //Set the Player's speed in the Running State
     public float runSpeed = 9f;
-   
+
     //Set the Player's speed when in the Air State.
     public float airSpeed = 3f;
 
     //Set the vertical force of the Player's Jump
     public float jumpForce = 10f;
-    
+
     Vector2 moveInput;
     TouchingDirections touchingDirections;
     Damageable damageable;
@@ -68,8 +87,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
-
     //Check if Player is moving to cycle between idle, walking and running animations.
     [SerializeField]
     private bool _isMoving = false;
@@ -79,7 +96,7 @@ public class PlayerController : MonoBehaviour
         {
             return _isMoving;
         }
-         private set
+        private set
         {
             _isMoving = value;
             animator.SetBool(AnimationStrings.isMoving, value);
@@ -89,14 +106,13 @@ public class PlayerController : MonoBehaviour
     //Check if the player is currently running and update the character animations (Tied to a key press in game).
     [SerializeField]
     private bool _isRunning = false;
-
-     public bool IsRunning
+    public bool IsRunning
     {
         get
         {
             return _isRunning;
         }
-         private set
+        private set
         {
             _isRunning = value;
             animator.SetBool(AnimationStrings.isRunning, value);
@@ -105,43 +121,51 @@ public class PlayerController : MonoBehaviour
 
     // Check the direction the player is facing and change movements/character animations as required.
     public bool _isFacingRight = true;
-    public bool IsFacingRight { get { return _isFacingRight; } private set{
-    if(_isFacingRight != value)
+    public bool IsFacingRight
     {
-        //Flip the local scale to make the player face the opposite direction.
-        transform.localScale *= new Vector2(-1, 1);
+        get { return _isFacingRight; }
+        private set
+        {
+            if (_isFacingRight != value)
+            {
+                //Flip the local scale to make the player face the opposite direction.
+                transform.localScale *= new Vector2(-1, 1);
+            }
+            _isFacingRight = value;
+
+        }
     }
-        _isFacingRight = value;
-        
-    } }
 
     //Check if the player is able to move during specific actions (Set in a animation behaviours through boolean conditions).
-    public bool CanMove { get
+    public bool CanMove
     {
-        return animator.GetBool(AnimationStrings.canMove);
-    }
+        get
+        {
+            return animator.GetBool(AnimationStrings.canMove);
+        }
 
     }
 
     //Check if the player is in the Alive State (has health).
-    public bool IsAlive {
+    public bool IsAlive
+    {
         get
         {
             return animator.GetBool(AnimationStrings.isAlive);
         }
     }
 
-  
-
     Rigidbody2D rb;
     Animator animator;
 
-    // Called when component exists in scene
-    // Rigidbody for physics values.
-    // Animator for values tied to animatons.
-    // Touching Directions for movement and direction orientation.
-    // Damageable for health and hit values.
-    private void Awake()
+    /*
+    Called when component exists in scene
+    Rigidbody for physics values.
+    Animator for values tied to animatons.
+    Touching Directions for movement and direction orientation.
+    Damageable for health and hit values.
+    */
+    public void Awake()
     {
         //Get Rigidbody and Animator componenets on Awake and set it
         rb = GetComponent<Rigidbody2D>();
@@ -154,7 +178,7 @@ public class PlayerController : MonoBehaviour
     // Update the player characters current movement speed depending on state. and if current velocity is not locked.
     private void FixedUpdate()
     {
-        if(!damageable.LockVelocity)
+        if (!damageable.LockVelocity)
             rb.velocity = new Vector2(moveInput.x * CurrentMoveSpeed, rb.velocity.y);
 
         //Update yVelocity to switch animations between player falling and player rising.
@@ -167,41 +191,41 @@ public class PlayerController : MonoBehaviour
     {
         moveInput = context.ReadValue<Vector2>();
 
-        if(IsAlive)
+        if (IsAlive)
         {
             IsMoving = moveInput != Vector2.zero;
-
             SetFacingDirection(moveInput);
         }
         else
         {
             IsMoving = false;
         }
-        
+
     }
 
-//Check the direction the player is facing and rotate the sprite.
+    //Check the direction the player is facing and rotate the sprite.
     private void SetFacingDirection(Vector2 moveInput)
     {
-        if(moveInput.x > 0 && !IsFacingRight)
+        if (moveInput.x > 0 && !IsFacingRight)
         {
             //Face the right
             IsFacingRight = true;
-
-        }else if(moveInput.x < 0 && IsFacingRight)
+        }
+        else if (moveInput.x < 0 && IsFacingRight)
         {
             //Face the left
             IsFacingRight = false;
         }
     }
-    
+
     // On pressing input key (set to shift) player will enter the running state.
     public void OnRun(InputAction.CallbackContext context)
     {
         if (context.started)
         {
             IsRunning = true;
-        }else if (context.canceled)
+        }
+        else if (context.canceled)
         {
             IsRunning = false;
         }
@@ -212,26 +236,25 @@ public class PlayerController : MonoBehaviour
     public void OnJump(InputAction.CallbackContext context)
     {
         //Check if the player can jump depending on current state
-       if(context.started && touchingDirections.IsGrounded && CanMove)
-       {
-        animator.SetTrigger(AnimationStrings.jumpTrigger);
-        rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-
-       }
+        if (context.started && touchingDirections.IsGrounded && CanMove)
+        {
+            animator.SetTrigger(AnimationStrings.jumpTrigger);
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+        }
     }
 
     // On pressing the input key (Set to Left Click on mouse) the player will enter attack state.
     public void OnAttack(InputAction.CallbackContext context)
     {
-        if(context.started)
+        if (context.started)
         {
             animator.SetTrigger(AnimationStrings.attackTrigger);
         }
     }
 
-      public void OnRangedAttack(InputAction.CallbackContext context)
+    public void OnRangedAttack(InputAction.CallbackContext context)
     {
-        if(context.started)
+        if (context.started)
         {
             animator.SetTrigger(AnimationStrings.rangedAttackTrigger);
         }
@@ -242,5 +265,4 @@ public class PlayerController : MonoBehaviour
     {
         rb.velocity = new Vector2(knockback.x, rb.velocity.y + knockback.y);
     }
-
 }

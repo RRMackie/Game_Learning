@@ -1,9 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 internal class AnimationStrings
 {
+    /*
+    Contains all the Unity Animation Panel condtions for
+    easy reference within application scripts.
+    This helped to streamline the correct references and link them
+    to the animations.
+    */
     internal static string isMoving = "isMoving";
     internal static string isRunning = "isRunning";
     internal static string isGrounded = "isGrounded";
