@@ -1,0 +1,6 @@
+The Movement folder contains the scripts related to player and NPC movement which are referenced within
+the application.
+
+Scripts:
+PlayerController - Contains code that is set up to interpret player input through the unity input manager. Sets up the standard movement capabilites within a 2D platformer and allows for setting animation and state conditions or triggers.
+TouchingDirections - Handles game objects facing direction and collsions with obstacles. For the player this can create smoother gameplay through movement contraints. NPC Game Objects require this script to be able to turn and move consistently.

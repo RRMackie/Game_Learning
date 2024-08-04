@@ -1,0 +1,8 @@
+The combat folder contains the scripts related to specific combat mechanics which are referenced within
+the application.
+
+Scripts:
+Attack - Deals with damage and knockback of attacked game objects
+Detection Zones - Handles detecting specific game objects within colliders
+Projectiles - Consists of all behaviours relating to projectiles: damage, knockback. life and amount of hits.
+Projectile Spawners - Set the location projectiles will spawn from.

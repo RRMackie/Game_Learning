@@ -1,0 +1,8 @@
+The State Machine folder contains the scripts related to setting constraints during animation states which are referenced within
+the application.
+
+Scripts:
+FadeRemove - Fades out and destroys the game object after reaching the death state.
+SetBoolBehaviour - Allows for setting boolean values related to animation states, such as contstraining movements during attacking
+SetFloatBehaviour - Allows setting particular float values when entering/exiting an animation state, such as setting player movement speed to 0 after being hit.
+PlaySingleUseBehaviour - Allows a single use componenet to be generated during specific states and destroyed after completion, used primarily for creating sfx audio for actions.

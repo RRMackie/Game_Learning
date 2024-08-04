@@ -1,0 +1,7 @@
+The World folder contains the scripts related to componenets that operate with the game world which are referenced within
+the application.
+
+Scripts:
+MovingPlatform - Handles behaviour for platforms within the game world, such as the activation, speed and array of waypoints they move between.
+MusicPlayer - Contains the script foe managing the setting and transtioning between music tracks for the game world.
+ParralaxEffects - Scripts the background to have an illusion of 3D movement using parallax scrolling.

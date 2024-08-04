@@ -1,0 +1,6 @@
+The dialogue folder contains the scripts related to dialogue and interaction mechanics which are referenced within
+the application.
+
+Scripts:
+DialogueManager - Enables dialogue through UI elements and INK plugin. Allows for choices within dialogue and advances it forward.
+DialogueTrigger - Handles direct interaction with NPC's and shows a visual cue when an NPC can be interacted with. Set dialogue JSON files for specific NPCs

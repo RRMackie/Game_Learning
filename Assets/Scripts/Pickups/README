@@ -1,0 +1,6 @@
+The Pickups folder contains the scripts related to health and knowledge pickups which are referenced within
+the application.
+
+Scripts:
+Health Pickup - All the behaviour set for the health game object such as amount healed, its contstraints on pickup and its minimal animation.
+Knowledge Pickup - Holds the scripts repalted to the game object such as interaction, dialogue and animations.

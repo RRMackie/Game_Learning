@@ -1,0 +1,6 @@
+The Enemies folder contains the scripts related to enemy NPC's which are referenced within
+the application.
+
+Scripts:
+Skeleton - Contains behaviour related to ground type enemys such as the skeleton game object. Includes movement and animation states.
+FlyingDemon - Handles the behaviour concerning flying enemy types such as the flying demon game object. Includes movement through an array of waypoint locations and animation state triggers.

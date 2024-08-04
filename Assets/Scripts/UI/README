@@ -1,0 +1,6 @@
+The UI folder contains the scripts related to User Interface componenets which are referenced within
+the application.
+
+Scripts:
+HealthBar - Creates and manages the health bar UI item created in Unity. Manages the health bar to reflect the player current health at all times.
+HealthText - Creates instances of text that showcase health lost or restored during gameplay.
